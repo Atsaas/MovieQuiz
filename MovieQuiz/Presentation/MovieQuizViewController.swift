@@ -6,6 +6,8 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var counterLabel: UILabel!
     @IBOutlet private var textLabel: UILabel!
+    @IBOutlet weak var yesButton: UIButton!
+    @IBOutlet weak var noButton: UIButton!
     
     private struct QuizQuestion {
         let image: String
@@ -91,10 +93,18 @@ final class MovieQuizViewController: UIViewController {
     }
     
     private func show(quiz step: QuizStepViewModel ) {
+        
+        yesButton.isEnabled = true
+        noButton.isEnabled = true
+        
         imageView.layer.borderWidth = 0 // в интернете посмотрел чтоб убирать  рамки) вроде правильный метод
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = 20
+        
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
+        
     }
     
     private func showAnswerResult(isCorrect: Bool) {
@@ -119,9 +129,10 @@ final class MovieQuizViewController: UIViewController {
     private func showNextQuestionOrResults() {
         if currentQuestionIndex == questions.count - 1 {
             let text = "Ваш результат \(correctAnswers)/10"
-            let viewModel = QuizResultsViewModel(title: "Этот раунд окончен!" ,
-                                                 text: text ,
-                                                 buttonText: "Сыграть еще раз" )
+            let viewModel = QuizResultsViewModel(
+                title: "Этот раунд окончен!" ,
+                text: text ,
+                buttonText: "Сыграть еще раз" )
             show(quiz: viewModel)
             
         } else {
@@ -159,6 +170,10 @@ final class MovieQuizViewController: UIViewController {
     }
     
     @IBAction private func noButtonClicked(_ sender: UIButton) {
+        
+        yesButton.isEnabled = false
+        noButton.isEnabled = false
+        
         let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = false
         
@@ -167,6 +182,10 @@ final class MovieQuizViewController: UIViewController {
     }
     
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
+        
+        yesButton.isEnabled = false
+        noButton.isEnabled = false
+        
         let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = true
         
